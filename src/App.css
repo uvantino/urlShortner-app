@@ -1,0 +1,44 @@
+#root {
+  /* margin: 0px;
+  padding: 0px; */
+  margin: 26px -17px 23px 331px;
+  background-color: aqua;
+}
+.shortlinks-main {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-between;
+  border: 1px solid gray;
+  background-color: white;
+  border-radius: 4px;
+  margin: 20px;
+  padding: 31px 24px 27px 61px;
+}
+.shortlinks-addlink-section {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+.shortlink-btn-add {
+  border: 0.2px solid green;
+  border-radius: 6px;
+  margin: 8px;
+  background-color: green;
+}
+.shortlinks-inputfield {
+  height: 30px;
+  width: 200px;
+  border-radius: 8px;
+}
+.shortenlinks-map {
+  display: flex;
+  flex-direction: column;
+  /* align-items: center; */
+}
+.shortenlinks-ul {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
