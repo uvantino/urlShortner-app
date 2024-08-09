@@ -1,45 +1,44 @@
-import { useState, useEffect, useRef } from "react";
+import { useState, useRef } from "react";
 import "./App.css";
+import QRCode from 'react-qr-code';
 
 function App() {
-  const [links, setLinks] = useState<string[]>([]);
+  const [links, setLinks] = useState([]);
   const [linkValue, setLinkValue] = useState("");
-  const [message, setMessage] = useState("");
   const [editIndex, setEditIndex] = useState(null);
+  const [qrCode, setQrCode] = useState(false);
+  const [qrLink, setQrLink] = useState('');
   const inputRef = useRef(null);
 
   const handleAddLinks = () => {
-    {
-      console.log(linkValue, "linkvaluehere");
-    }
+    if (linkValue.trim() === '') return;
     if (editIndex !== null) {
-      const updatedLinks = links;
+      const updatedLinks = [...links];
       updatedLinks[editIndex] = linkValue;
-      setLinkValue([...updatedLinks])
+      setLinks(updatedLinks);
     } else {
-      // setLinkValue(linkValue);
       setLinks([...links, linkValue]);
     }
     setLinkValue("");
-    setEditIndex(null)
+    setEditIndex(null);
   };
 
   const handleEdit = (idx) => {
     inputRef.current.focus();
-    setLinkValue(links[idx])
+    setLinkValue(links[idx]);
     setEditIndex(idx);
+  };
 
+  const generateQrcode = (index) => {
+    setEditIndex(index);
+    setQrCode(true);
+    setQrLink(links[index]);
   };
 
   const handleclear = () => {
-    setLinks([])
-  }
-
-  // useEffect(() => {
-  //   fetch("http://localhost:5000/api")
-  //     .then((response) => response.json())
-  //     .then((data) => setMessage(data.message));
-  // }, []);
+    setLinks([]);
+    setQrCode(false);
+  };
 
   return (
     <div className="shortlinks-main">
@@ -53,26 +52,29 @@ function App() {
           onChange={(e) => setLinkValue(e.target.value)}
         />
         <button className="shortlink-btn-add" onClick={handleAddLinks}>
-          {editIndex !==null ? 'updateUrl' :  'Shorten URL'}
+          {editIndex !== null ? 'Update URL' : 'Shorten URL'}
         </button>
       </div>
       <div className="shortenlinks-map">
-        {links.map((item, index) => {
-          return (
-            <ul key={index} className="shortenlinks-ul">
-              <li>{item}</li>
-              <button
-                className="shortlink-edit-btn"
-                onClick={() => handleEdit(index)}
-              >
-                Edit
-              </button>
-            </ul>
-          );
-        })}
+        {links.map((item, index) => (
+          <ul key={index} className="shortenlinks-ul">
+            <li>{item}</li>
+            <button
+              className="shortlink-edit-btn"
+              onClick={() => handleEdit(index)}
+            >
+              Edit
+            </button>
+            <button onClick={() => generateQrcode(index)}>Generate QR Code</button>
+            {editIndex === index && qrCode && (
+              <div className='qrcode'>
+                <QRCode value={qrLink} size={100} />
+              </div>
+            )}
+          </ul>
+        ))}
         <button className="shortenlinks-clear-btn" onClick={handleclear}>Clear All</button>
       </div>
-      <div className="api-response-here">{message}</div>
     </div>
   );
 }
